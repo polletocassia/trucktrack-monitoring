@@ -1,11 +1,59 @@
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from "recharts";
+
+import StatCard from "../components/ui/StatCard";
+import CardMain from "../components/ui/CardMain";
+
 export default function Dashboard() {
 
   const stats = [
-    { title: "Total Passagens", value: 8 },
-    { title: "Aprovados", value: 3 },
-    { title: "Infrações", value: 4 },
-    { title: "Conformidade", value: "37.5%" }
+    {
+      title: "Passagens Hoje",
+      value: 128,
+      description: "+12% em relação a ontem"
+    },
+    {
+      title: "Aprovados",
+      value: 102,
+      description: "Veículos dentro do peso"
+    },
+    {
+      title: "Infrações",
+      value: 26,
+      description: "Excesso de peso detectado"
+    },
+    {
+      title: "Conformidade",
+      value: "79%",
+      description: "Taxa de aprovação geral"
+    }
   ];
+
+  const passagensHora = [
+    { hora: "08h", passagens: 12 },
+    { hora: "09h", passagens: 18 },
+    { hora: "10h", passagens: 9 },
+    { hora: "11h", passagens: 14 },
+    { hora: "12h", passagens: 7 },
+    { hora: "13h", passagens: 11 }
+  ];
+
+  const infracoesTipo = [
+    { name: "Excesso Eixo", value: 14 },
+    { name: "Excesso PBT", value: 8 },
+    { name: "Outros", value: 4 }
+  ];
+
+  const COLORS = ["#ef4444", "#f59e0b", "#6b7280"];
 
   return (
 
@@ -16,22 +64,76 @@ export default function Dashboard() {
       <div className="stats">
 
         {stats.map((s, i) => (
-          <div key={i} className="stat-card">
-            <h2>{s.value}</h2>
-            <p>{s.title}</p>
-          </div>
+          <StatCard key={i} {...s} />
         ))}
 
       </div>
 
       <div className="dashboard-grid">
 
-        <div className="recent">
+        <CardMain title="Passagens por Hora">
 
-          <h3>Passagens Recentes</h3>
+          <ResponsiveContainer width="100%" height={250}>
+
+            <LineChart data={passagensHora}>
+
+              <XAxis dataKey="hora" />
+
+              <YAxis />
+
+              <Tooltip />
+
+              <Line
+                type="monotone"
+                dataKey="passagens"
+                stroke="#3b82f6"
+                strokeWidth={3}
+              />
+
+            </LineChart>
+
+          </ResponsiveContainer>
+
+        </CardMain>
+
+        <CardMain title="Infrações por Tipo">
+
+          <ResponsiveContainer width="100%" height={250}>
+
+            <PieChart>
+
+              <Pie
+                data={infracoesTipo}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={90}
+                label
+              >
+
+                {infracoesTipo.map((entry, index) => (
+                  <Cell
+                    key={index}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+
+              </Pie>
+
+              <Tooltip />
+
+            </PieChart>
+
+          </ResponsiveContainer>
+
+        </CardMain>
+
+      </div>
+
+      <div className="dashboard-grid">
+
+        <CardMain title="Passagens Recentes">
 
           <table>
-
             <thead>
               <tr>
                 <th>ID</th>
@@ -68,11 +170,9 @@ export default function Dashboard() {
 
           </table>
 
-        </div>
+        </CardMain>
 
-        <div className="infractions">
-
-          <h3>Últimas Infrações</h3>
+        <CardMain title="Últimas Infrações">
 
           <div className="infraction">
             <strong>VWX-0123</strong>
@@ -89,7 +189,7 @@ export default function Dashboard() {
             <span>Excesso de 0.65t no Eixo 3</span>
           </div>
 
-        </div>
+        </CardMain>
 
       </div>
 
