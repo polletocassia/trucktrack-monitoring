@@ -1,27 +1,30 @@
+import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
 
-export default function MainLayout(){
+export default function MainLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  return(
+  function handleToggleSidebar() {
+    setSidebarOpen(!sidebarOpen);
+  }
 
+  function handleCloseSidebar() {
+    setSidebarOpen(false);
+  }
+
+  return (
     <div className="layout">
-
-      <Sidebar/>
+      <Sidebar isOpen={sidebarOpen} onClose={handleCloseSidebar} />
 
       <div className="main">
-
-        <Header/>
+        <Header onToggleSidebar={handleToggleSidebar} />
 
         <div className="content">
-          <Outlet/>
+          <Outlet />
         </div>
-
       </div>
-
     </div>
-
-  )
-
+  );
 }

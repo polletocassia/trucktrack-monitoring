@@ -11,7 +11,7 @@ export default function ChartCard({
   children
 }: ChartCardProps) {
   return (
-    <Card className="chart-card">
+    <Card className="chart-card h-100">
 
       <h3>{title}</h3>
 

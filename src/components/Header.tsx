@@ -1,8 +1,11 @@
 import { useLocation, Link } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 
-export default function Header() {
+interface HeaderProps {
+  onToggleSidebar: () => void;
+}
 
+export default function Header({ onToggleSidebar }: HeaderProps) {
   const location = useLocation();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -29,72 +32,74 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="header">
+    <header className="header px-3 px-md-4">
+      <div className="d-flex align-items-center justify-content-between w-100">
 
-      <div className="breadcrumb">
+        <div className="d-flex align-items-center flex-grow-1 min-w-0">
 
-        <Link to="/">Dashboard</Link>
+          <button
+            type="button"
+            className="hamburger-button d-md-none me-3"
+            onClick={onToggleSidebar}
+          >
+            ☰
+          </button>
 
-        {pathnames.map((value, index) => {
+          <div className="breadcrumb flex-grow-1 text-truncate">
+            <Link to="/">Dashboard</Link>
 
-          const to = "/" + pathnames.slice(0, index + 1).join("/");
+            {pathnames.map((value, index) => {
+              const to = "/" + pathnames.slice(0, index + 1).join("/");
 
-          return (
-            <span key={to}>
-              {" / "}
-              <Link to={to}>
-                {routeNames[value] || value}
-              </Link>
-            </span>
-          );
-        })}
-
-      </div>
-
-      <div className="user-menu" ref={menuRef}>
-
-        <button
-          className="user-button"
-          onClick={() => setOpen(!open)}
-        >
-
-          <div className="user-info">
-            <span className="user-name">Admin</span>
+              return (
+                <span key={to}>
+                  {" / "}
+                  <Link to={to}>
+                    {routeNames[value] || value}
+                  </Link>
+                </span>
+              );
+            })}
           </div>
+        </div>
 
-          <span className={`dropdown-arrow ${open ? "open" : ""}`}>
-            ▾
-          </span>
-        </button>
-
-        {open && (
-          <div className="dropdown">
-
-            <div className="dropdown-header">
-              <div className="avatar large">A</div>
-              <div>
-                <strong>Admin</strong>
-                <p>admin@email.com</p>
-              </div>
+        <div className="user-menu ms-3" ref={menuRef}>
+          <button
+            className="user-button"
+            onClick={() => setOpen(!open)}
+          >
+            <div className="user-info">
+              <span className="user-name">Admin</span>
             </div>
 
-            <div className="dropdown-divider"></div>
+            <span className={`dropdown-arrow ${open ? "open" : ""}`}>
+              ▾
+            </span>
+          </button>
 
-            <Link to="/perfil">Meu perfil</Link>
+          {open && (
+            <div className="dropdown">
+              <div className="dropdown-header">
+                <div className="avatar large">A</div>
+                <div>
+                  <strong>Admin</strong>
+                  <p>admin@email.com</p>
+                </div>
+              </div>
 
-            <Link to="/configuracoes">Configurações</Link>
+              <div className="dropdown-divider"></div>
 
-            <button>Trocar conta</button>
+              <Link to="/perfil">Meu perfil</Link>
+              <Link to="/configuracoes">Configurações</Link>
+              <button>Trocar conta</button>
 
-            <div className="dropdown-divider"></div>
+              <div className="dropdown-divider"></div>
 
-            <button className="logout">Sair</button>
-
-          </div>
-        )}
-
+              <button className="logout">Sair</button>
+            </div>
+          )}
+        </div>
       </div>
-
     </header>
   );
 }

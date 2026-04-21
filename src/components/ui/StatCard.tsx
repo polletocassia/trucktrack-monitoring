@@ -10,7 +10,7 @@ export default function StatCard({
   description
 }: StatCardProps) {
   return (
-    <div className="stat-card">
+    <div className="stat-card h-100">
 
       <p className="stat-title">{title}</p>
 
