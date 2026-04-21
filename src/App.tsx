@@ -1,7 +1,7 @@
   import { BrowserRouter, Routes, Route } from "react-router-dom";
-  import MainLayout from "../layout/MainLayout";
+  import MainLayout from "./layout/MainLayout";
 
-  import Dashboard from "../pages/Dashboard";
+  import Dashboard from "./pages/Dashboard";
   // import Passagens from "./pages/Passage";
   // import Relatorios from "./pages/Reports";
   // import Veiculos from "./pages/Vehicles";
