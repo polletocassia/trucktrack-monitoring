@@ -1,0 +1,74 @@
+{
+  "stats": [
+    {
+      "title": "Passagens Hoje",
+      "value": 128,
+      "description": "+12% em relação a ontem"
+    },
+    {
+      "title": "Aprovados",
+      "value": 102,
+      "description": "Veículos dentro do peso"
+    },
+    {
+      "title": "Infrações",
+      "value": 26,
+      "description": "Excesso de peso detectado"
+    },
+    {
+      "title": "Conformidade",
+      "value": "79%",
+      "description": "Taxa de aprovação geral"
+    }
+  ],
+  "passagensHora": [
+    { "hora": "08h", "passagens": 12 },
+    { "hora": "09h", "passagens": 18 },
+    { "hora": "10h", "passagens": 9 },
+    { "hora": "11h", "passagens": 14 },
+    { "hora": "12h", "passagens": 7 },
+    { "hora": "13h", "passagens": 11 }
+  ],
+  "infracoesTipo": [
+    { "name": "Excesso Eixo", "value": 14 },
+    { "name": "Excesso PBT", "value": 8 },
+    { "name": "Outros", "value": 4 }
+  ],
+  "passagensRecentes": [
+    {
+      "id": "PSG-001",
+      "placa": "ABC-1234",
+      "data": "17/03/2026",
+      "status": "Aprovado",
+      "statusClass": "ok"
+    },
+    {
+      "id": "PSG-002",
+      "placa": "DEF-5678",
+      "data": "17/03/2026",
+      "status": "Excesso",
+      "statusClass": "warn"
+    },
+    {
+      "id": "PSG-003",
+      "placa": "GHI-9012",
+      "data": "17/03/2026",
+      "status": "Eixo",
+      "statusClass": "error"
+    }
+  ],
+  "ultimasInfracoes": [
+    {
+      "placa": "VWX-0123",
+      "descricao": "Excesso de 0.70t no Eixo 2"
+    },
+    {
+      "placa": "PQR-2345",
+      "descricao": "Excesso de 2.3t no PBT"
+    },
+    {
+      "placa": "GHI-9012",
+      "descricao": "Excesso de 0.65t no Eixo 3"
+    }
+  ]
+}
