@@ -33,10 +33,8 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
 
   return (
     <header className="header px-3 px-md-4">
-      <div className="d-flex align-items-center justify-content-between w-100">
-
-        <div className="d-flex align-items-center flex-grow-1 min-w-0">
-
+      <div className="header-container">
+        <div className="header-left">
           <button
             type="button"
             className="hamburger-button d-md-none me-3"
@@ -45,7 +43,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
             ☰
           </button>
 
-          <div className="breadcrumb flex-grow-1 text-truncate">
+          <div className="breadcrumb">
             <Link to="/">Dashboard</Link>
 
             {pathnames.map((value, index) => {
@@ -63,41 +61,43 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           </div>
         </div>
 
-        <div className="user-menu ms-3" ref={menuRef}>
-          <button
-            className="user-button"
-            onClick={() => setOpen(!open)}
-          >
-            <div className="user-info">
-              <span className="user-name">Admin</span>
-            </div>
-
-            <span className={`dropdown-arrow ${open ? "open" : ""}`}>
-              ▾
-            </span>
-          </button>
-
-          {open && (
-            <div className="dropdown">
-              <div className="dropdown-header">
-                <div className="avatar large">A</div>
-                <div>
-                  <strong>Admin</strong>
-                  <p>admin@email.com</p>
-                </div>
+        <div className="header-right">
+          <div className="user-menu" ref={menuRef}>
+            <button
+              className="user-button"
+              onClick={() => setOpen(!open)}
+            >
+              <div className="user-info">
+                <span className="user-name">Admin</span>
               </div>
 
-              <div className="dropdown-divider"></div>
+              <span className={`dropdown-arrow ${open ? "open" : ""}`}>
+                ▾
+              </span>
+            </button>
 
-              <Link to="/perfil">Meu perfil</Link>
-              <Link to="/configuracoes">Configurações</Link>
-              <button>Trocar conta</button>
+            {open && (
+              <div className="dropdown">
+                <div className="dropdown-header">
+                  <div className="avatar large">A</div>
+                  <div>
+                    <strong>Admin</strong>
+                    <p>admin@email.com</p>
+                  </div>
+                </div>
 
-              <div className="dropdown-divider"></div>
+                <div className="dropdown-divider"></div>
 
-              <button className="logout">Sair</button>
-            </div>
-          )}
+                <Link to="/perfil">Meu perfil</Link>
+                <Link to="/configuracoes">Configurações</Link>
+                <button>Trocar conta</button>
+
+                <div className="dropdown-divider"></div>
+
+                <button className="logout">Sair</button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

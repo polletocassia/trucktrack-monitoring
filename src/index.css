@@ -25,8 +25,6 @@ body {
   flex-shrink: 0;
 }
 
-/* HEADER SIDEBAR */
-
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -144,31 +142,6 @@ body {
   text-transform: uppercase;
   color: #6b7280;
   margin: 20px 0 10px;
-}
-
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: #9ca3af;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.breadcrumb a {
-  color: #9ca3af;
-  text-decoration: none;
-}
-
-.breadcrumb a:hover {
-  color: white;
-}
-
-.breadcrumb span {
-  color: white;
 }
 
 .user-menu {
@@ -316,6 +289,59 @@ body {
   z-index: 10;
 }
 
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #9ca3af;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.breadcrumb a,
+.breadcrumb span {
+  white-space: nowrap;
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+@media (max-width: 767.98px) {
+  .header-left {
+    min-width: 0;
+  }
+
+  .breadcrumb {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .breadcrumb a,
+  .breadcrumb span {
+    white-space: nowrap;
+  }
+}
+
 .user {
   display: flex;
   align-items: center;
@@ -460,6 +486,7 @@ td {
   cursor: pointer;
   padding: 0;
   line-height: 1;
+  margin-right: 12px;
 }
 
 .sidebar-overlay {
@@ -503,11 +530,6 @@ td {
 
   .content {
     padding: 0 16px 30px 16px;
-  }
-
-  .breadcrumb {
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .dropdown {
