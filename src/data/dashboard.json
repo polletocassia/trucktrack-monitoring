@@ -1,14 +1,35 @@
 {
+  "config": {
+    "limitePassagensDia": 120,
+    "intervalosEntrada": [120000, 30000, 60000],
+    "maxUltimasInfracoes": 10,
+    "localPadraoInfracao": "BR-285 km 455"
+  },
+  "colors": [
+    "#ef4444",
+    "#f59e0b",
+    "#6b7280",
+    "#3b82f6",
+    "#10b981",
+    "#8b5cf6"
+  ],
+  "tooltip": {
+    "backgroundColor": "#0b0d11",
+    "border": "1px solid #1f2937",
+    "borderRadius": "8px",
+    "color": "#e5e7eb",
+    "fontSize": "13px"
+  },
   "stats": [
     {
       "title": "Passagens Hoje",
-      "value": 128,
+      "value": 110,
       "description": "+12% em relação a ontem"
     },
     {
       "title": "Aprovados",
       "value": 102,
-      "description": "Veículos dentro do peso"
+      "description": "Veículos dentro dos limites DNIT"
     },
     {
       "title": "Infrações",
@@ -18,7 +39,17 @@
     {
       "title": "Conformidade",
       "value": "79%",
-      "description": "Taxa de aprovação geral"
+      "description": "Taxa geral de aprovação"
+    },
+    {
+      "title": "Peso Médio",
+      "value": "32.5t",
+      "description": "Média das últimas 24h"
+    },
+    {
+      "title": "Maior Excesso",
+      "value": "2.3t",
+      "description": "Maior excesso registrado hoje"
     }
   ],
   "passagensHora": [
@@ -30,15 +61,20 @@
     { "hora": "13h", "passagens": 11 }
   ],
   "infracoesTipo": [
-    { "name": "Excesso Eixo", "value": 14 },
-    { "name": "Excesso PBT", "value": 8 },
-    { "name": "Outros", "value": 4 }
+    { "name": "Eixo Individual", "value": 10 },
+    { "name": "Eixo Tandem", "value": 4 },
+    { "name": "Excesso de PBT", "value": 8 },
+    { "name": "Carga Irregular", "value": 4 }
   ],
   "passagensRecentes": [
     {
       "id": "PSG-001",
       "placa": "ABC-1234",
       "data": "17/03/2026",
+      "tipoVeiculo": "2C",
+      "pbt": "11.8t",
+      "limite": "12.0t",
+      "excesso": "-",
       "status": "Aprovado",
       "statusClass": "ok"
     },
@@ -46,29 +82,122 @@
       "id": "PSG-002",
       "placa": "DEF-5678",
       "data": "17/03/2026",
-      "status": "Excesso",
+      "tipoVeiculo": "3S3",
+      "pbt": "48.3t",
+      "limite": "45.0t",
+      "excesso": "+3.3t",
+      "status": "Excesso PBT",
       "statusClass": "warn"
     },
     {
       "id": "PSG-003",
       "placa": "GHI-9012",
       "data": "17/03/2026",
-      "status": "Eixo",
+      "tipoVeiculo": "3C",
+      "pbt": "24.9t",
+      "limite": "23.0t",
+      "excesso": "+1.9t",
+      "status": "Excesso Eixo",
       "statusClass": "error"
+    },
+    {
+      "id": "PSG-004",
+      "placa": "JKL-3456",
+      "data": "17/03/2026",
+      "tipoVeiculo": "3D4",
+      "pbt": "56.2t",
+      "limite": "57.0t",
+      "excesso": "-",
+      "status": "Aprovado",
+      "statusClass": "ok"
     }
   ],
   "ultimasInfracoes": [
     {
       "placa": "VWX-0123",
-      "descricao": "Excesso de 0.70t no Eixo 2"
+      "descricao": "Excesso de 0.70t no Eixo 2",
+      "tipoVeiculo": "3C",
+      "local": "BR-285 km 455"
     },
     {
       "placa": "PQR-2345",
-      "descricao": "Excesso de 2.3t no PBT"
+      "descricao": "Excesso de 2.3t no PBT",
+      "tipoVeiculo": "3S3",
+      "local": "BR-158 km 122"
     },
     {
       "placa": "GHI-9012",
-      "descricao": "Excesso de 0.65t no Eixo 3"
+      "descricao": "Excesso de 0.65t no Eixo 3",
+      "tipoVeiculo": "3D4",
+      "local": "BR-285 km 455"
+    }
+  ],
+  "novosRegistros": [
+    {
+      "id": "PSG-005",
+      "placa": "MNO-7788",
+      "data": "17/03/2026",
+      "tipoVeiculo": "3S3",
+      "pbt": "44.5t",
+      "limite": "45.0t",
+      "excesso": "-",
+      "status": "Aprovado",
+      "statusClass": "ok"
+    },
+    {
+      "id": "PSG-006",
+      "placa": "RST-3321",
+      "data": "17/03/2026",
+      "tipoVeiculo": "3C",
+      "pbt": "24.1t",
+      "limite": "23.0t",
+      "excesso": "+1.1t",
+      "status": "Excesso Eixo",
+      "statusClass": "error"
+    },
+    {
+      "id": "PSG-007",
+      "placa": "UVW-9087",
+      "data": "17/03/2026",
+      "tipoVeiculo": "2C",
+      "pbt": "12.7t",
+      "limite": "12.0t",
+      "excesso": "+0.7t",
+      "status": "Excesso PBT",
+      "statusClass": "warn"
+    },
+    {
+      "id": "PSG-008",
+      "placa": "QWE-4521",
+      "data": "17/03/2026",
+      "tipoVeiculo": "3D4",
+      "pbt": "56.8t",
+      "limite": "57.0t",
+      "excesso": "-",
+      "status": "Aprovado",
+      "statusClass": "ok"
+    },
+    {
+      "id": "PSG-009",
+      "placa": "ZXC-1190",
+      "data": "17/03/2026",
+      "tipoVeiculo": "3S3",
+      "pbt": "47.2t",
+      "limite": "45.0t",
+      "excesso": "+2.2t",
+      "status": "Excesso PBT",
+      "statusClass": "warn"
+    },
+    {
+      "id": "PSG-010",
+      "placa": "ASD-7781",
+      "data": "17/03/2026",
+      "tipoVeiculo": "3C",
+      "pbt": "22.6t",
+      "limite": "23.0t",
+      "excesso": "-",
+      "status": "Aprovado",
+      "statusClass": "ok"
     }
   ]
 }

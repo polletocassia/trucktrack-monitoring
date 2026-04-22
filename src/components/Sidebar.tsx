@@ -20,8 +20,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <span className="logo-sub">Track</span>
         </div>
 
-        <div className="menu-group">
-          <div className="menu-section">Monitoramento</div>
+        <div className="menu-group mb-3">
+          <div className="menu-section"><strong>MONITORAMENTO</strong></div>
 
           <nav className="menu">
             <NavLink to="/" end onClick={onClose}>
@@ -43,7 +43,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         <div className="menu-group">
-          <div className="menu-section">Sistema</div>
+          <div className="menu-section"><strong>SISTEMA</strong></div>
 
           <nav className="menu">
             <NavLink to="/configuracoes" onClick={onClose}>

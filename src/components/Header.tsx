@@ -64,6 +64,7 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
         <div className="header-right">
           <div className="user-menu" ref={menuRef}>
             <button
+              type="button"
               className="user-button"
               onClick={() => setOpen(!open)}
             >
@@ -77,8 +78,8 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
             </button>
 
             {open && (
-              <div className="dropdown">
-                <div className="dropdown-header">
+              <div className="user-dropdown-menu">
+                <div className="user-dropdown-header">
                   <div className="avatar large">A</div>
                   <div>
                     <strong>Admin</strong>
@@ -86,15 +87,25 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
                   </div>
                 </div>
 
-                <div className="dropdown-divider"></div>
+                <div className="user-dropdown-divider"></div>
 
-                <Link to="/perfil">Meu perfil</Link>
-                <Link to="/configuracoes">Configurações</Link>
-                <button>Trocar conta</button>
+                <Link to="/perfil" className="user-dropdown-link">
+                  Meu perfil
+                </Link>
 
-                <div className="dropdown-divider"></div>
+                <Link to="/configuracoes" className="user-dropdown-link">
+                  Configurações
+                </Link>
 
-                <button className="logout">Sair</button>
+                <button type="button" className="user-dropdown-action">
+                  Trocar conta
+                </button>
+
+                <div className="user-dropdown-divider"></div>
+
+                <button type="button" className="user-dropdown-action logout">
+                  Sair
+                </button>
               </div>
             )}
           </div>
