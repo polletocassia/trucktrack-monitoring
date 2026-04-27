@@ -3,7 +3,7 @@
 
   import Dashboard from "./pages/Dashboard";
   import Passagens from "./pages/Passagens";
-  // import Relatorios from "./pages/Reports";
+  import Relatorios from "./pages/Relatorios";
   // import Veiculos from "./pages/Vehicles";
   // import Configuracoes from "./pages/Settings";
 
@@ -18,8 +18,8 @@
 
             <Route index element={<Dashboard />} />
             <Route path="passagens" element={<Passagens />} />
+            <Route path="relatorios" element={<Relatorios />} />
 
-            {/* <Route path="relatorios" element={<Relatorios />} /> */}
             {/* <Route path="veiculos" element={<Veiculos />} /> */}
             {/* <Route path="configuracoes" element={<Configuracoes />} /> */}
 

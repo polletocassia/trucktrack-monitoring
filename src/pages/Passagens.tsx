@@ -175,57 +175,67 @@ export default function Passagens() {
             </div>
 
             <CardMain title="Filtros de Consulta">
-                <div className="passagens-filters">
-                    <div className="filter-group">
-                        <label>Buscar por placa ou ID</label>
-                        <input
-                            type="text"
-                            placeholder="Ex: ABC-1234 ou PSG-001"
-                            value={busca}
-                            onChange={(e) => {
-                                setBusca(e.target.value);
-                                setPaginaAtual(1);
-                            }}
-                        />
+                <div className="row g-3 passagens-filters">
+
+                    <div className="col-12 col-md-4">
+                        <div className="filter-group">
+                            <label>Buscar por placa ou ID</label>
+                            <input
+                                type="text"
+                                placeholder="Ex: ABC-1234 ou PSG-001"
+                                value={busca}
+                                onChange={(e) => {
+                                    setBusca(e.target.value);
+                                    setPaginaAtual(1);
+                                }}
+                            />
+                        </div>
                     </div>
 
-                    <div className="filter-group">
-                        <label>Status</label>
-                        <select
-                            value={status}
-                            onChange={(e) => {
-                                setStatus(e.target.value);
-                                setPaginaAtual(1);
-                            }}
-                        >
-                            <option value="todos">Todos</option>
-                            <option value="Aprovado">Aprovado</option>
-                            <option value="Excesso PBT">Excesso PBT</option>
-                            <option value="Excesso Eixo">Excesso Eixo</option>
-                        </select>
+                    <div className="col-12 col-md-4">
+                        <div className="filter-group">
+                            <label>Status</label>
+                            <select
+                                value={status}
+                                onChange={(e) => {
+                                    setStatus(e.target.value);
+                                    setPaginaAtual(1);
+                                }}
+                            >
+                                <option value="todos">Todos</option>
+                                <option value="Aprovado">Aprovado</option>
+                                <option value="Excesso PBT">Excesso PBT</option>
+                                <option value="Excesso Eixo">Excesso Eixo</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div className="filter-group">
-                        <label>Tipo de veículo</label>
-                        <select
-                            value={tipoVeiculo}
-                            onChange={(e) => {
-                                setTipoVeiculo(e.target.value);
-                                setPaginaAtual(1);
-                            }}
-                        >
-                            <option value="todos">Todos</option>
-                            {tiposVeiculo.map((tipo) => (
-                                <option key={tipo} value={tipo}>
-                                    {tipo}
-                                </option>
-                            ))}
-                        </select>
+                    <div className="col-12 col-md-4">
+                        <div className="filter-group">
+                            <label>Tipo de veículo</label>
+                            <select
+                                value={tipoVeiculo}
+                                onChange={(e) => {
+                                    setTipoVeiculo(e.target.value);
+                                    setPaginaAtual(1);
+                                }}
+                            >
+                                <option value="todos">Todos</option>
+                                {tiposVeiculo.map((tipo) => (
+                                    <option key={tipo} value={tipo}>
+                                        {tipo}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
-                    <button className="filter-clear-button" onClick={limparFiltros}>
-                        Limpar filtros
-                    </button>
+                    <div className="col-12 d-flex justify-content-end mt-4">
+                        <button className="filter-clear-button" onClick={limparFiltros}>
+                            Limpar filtros
+                        </button>
+                    </div>
+
                 </div>
             </CardMain>
 

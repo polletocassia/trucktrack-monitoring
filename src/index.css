@@ -621,13 +621,6 @@ svg:focus-visible {
   padding-right: 4px;
 }
 
-.passagens-filters {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr auto;
-  gap: 15px;
-  align-items: end;
-}
-
 .filter-group {
   display: flex;
   flex-direction: column;
