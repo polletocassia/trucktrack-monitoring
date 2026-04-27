@@ -5,7 +5,7 @@
   import Passagens from "./pages/Passagens";
   import Relatorios from "./pages/Relatorios";
   import Veiculos from "./pages/Veiculos";
-  // import Configuracoes from "./pages/Settings";
+  import Configuracoes from "./pages/Configuracoes";
 
   function App() {
 
@@ -20,8 +20,8 @@
             <Route path="passagens" element={<Passagens />} />
             <Route path="relatorios" element={<Relatorios />} />
             <Route path="veiculos" element={<Veiculos />} />
-            
-            {/* <Route path="configuracoes" element={<Configuracoes />} /> */}
+
+            <Route path="configuracoes" element={<Configuracoes />} />
 
           </Route>
 

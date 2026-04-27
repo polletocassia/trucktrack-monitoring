@@ -1,0 +1,32 @@
+{
+  "sistema": {
+    "nome": "TruckTrack Monitoring",
+    "versao": "1.0.0",
+    "ambiente": "Simulação",
+    "status": "Ativo"
+  },
+  "monitoramento": {
+    "localPadrao": "BR-285 km 455",
+    "tempoAtualizacao": "30 segundos",
+    "limitePassagensDia": 120,
+    "armazenamentoDias": 180
+  },
+  "pesagem": {
+    "toleranciaPbt": "5%",
+    "toleranciaEixo": "7.5%",
+    "unidadePeso": "Toneladas",
+    "fonteRegras": "DNIT/CONTRAN"
+  },
+  "ocr": {
+    "confiancaMinima": "90%",
+    "armazenarImagem": "Sim",
+    "formatoImagem": "JPG",
+    "diretorio": "/assets/ocr/"
+  },
+  "notificacoes": {
+    "alertaExcessoPbt": "Ativo",
+    "alertaExcessoEixo": "Ativo",
+    "alertaOcrBaixaConfianca": "Ativo",
+    "emailResponsavel": "admin@trucktrack.com"
+  }
+}
