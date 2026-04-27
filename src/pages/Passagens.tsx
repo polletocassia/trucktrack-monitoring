@@ -2,6 +2,12 @@ import { useMemo, useState } from "react";
 
 import StatCard from "../components/ui/StatCard";
 import CardMain from "../components/ui/CardMain";
+import Table from "../components/ui/Table";
+import Pagination from "../components/ui/Pagination";
+import Modal from "../components/ui/Modal";
+import ModalTabs from "../components/ui/ModalTabs";
+import DetailSection from "../components/ui/DetailSection";
+
 import passagensData from "../data/passagens.json";
 
 type Passagem = {
@@ -36,6 +42,8 @@ type Passagem = {
     }[];
 };
 
+type VisualizacaoModal = "detalhes" | "relatorio" | "ocr";
+
 const REGISTROS_POR_PAGINA = 50;
 
 function parseToneladas(value: string): number {
@@ -57,9 +65,8 @@ export default function Passagens() {
     const [passagemSelecionada, setPassagemSelecionada] =
         useState<Passagem | null>(null);
 
-    const [visualizacaoModal, setVisualizacaoModal] = useState<
-        "detalhes" | "relatorio" | "ocr"
-    >("detalhes");
+    const [visualizacaoModal, setVisualizacaoModal] =
+        useState<VisualizacaoModal>("detalhes");
 
     const tiposVeiculo = useMemo(() => {
         return Array.from(new Set(todasPassagens.map((item) => item.tipoVeiculo)));
@@ -223,275 +230,268 @@ export default function Passagens() {
             </CardMain>
 
             <div className="row g-3 mt-1">
-                <div className="col-12 col-md-12">
+                <div className="col-12">
                     <CardMain title="Lista de Passagens">
-                        <div className="table-responsive">
-                            <table className="w-100 recent-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Placa</th>
-                                        <th>Data</th>
-                                        <th>Tipo</th>
-                                        <th>PBT</th>
-                                        <th>Limite</th>
-                                        <th>Excesso</th>
-                                        <th>Status</th>
-                                        <th>Ação</th>
-                                    </tr>
-                                </thead>
+                        <Table<Passagem>
+                            data={passagensPaginadas}
+                            emptyMessage="Nenhuma passagem encontrada com os filtros selecionados."
+                            columns={[
+                                { header: "ID", accessor: "id" },
+                                { header: "Placa", accessor: "placa" },
+                                { header: "Data", accessor: "data" },
+                                { header: "Tipo", accessor: "tipoVeiculo" },
+                                { header: "PBT", accessor: "pbt" },
+                                { header: "Limite", accessor: "limite" },
+                                { header: "Excesso", accessor: "excesso" },
+                                {
+                                    header: "Status",
+                                    render: (item) => (
+                                        <span className={`status ${item.statusClass}`}>
+                                            {item.status}
+                                        </span>
+                                    )
+                                },
+                                {
+                                    header: "Ação",
+                                    render: (item) => (
+                                        <button
+                                            className="table-action-button"
+                                            onClick={() => abrirModal(item)}
+                                        >
+                                            Detalhes
+                                        </button>
+                                    )
+                                }
+                            ]}
+                        />
 
-                                <tbody>
-                                    {passagensPaginadas.map((item, index) => (
-                                        <tr key={`${item.id}-${index}`}>
-                                            <td>{item.id}</td>
-                                            <td>{item.placa}</td>
-                                            <td>{item.data}</td>
-                                            <td>{item.tipoVeiculo}</td>
-                                            <td>{item.pbt}</td>
-                                            <td>{item.limite}</td>
-                                            <td>{item.excesso}</td>
-                                            <td>
-                                                <span className={`status ${item.statusClass}`}>
-                                                    {item.status}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <button
-                                                    className="table-action-button"
-                                                    onClick={() => abrirModal(item)}
-                                                >
-                                                    Detalhes
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-
-                            {passagensFiltradas.length === 0 && (
-                                <div className="empty-state">
-                                    Nenhuma passagem encontrada com os filtros selecionados.
-                                </div>
-                            )}
-                        </div>
-
-                        {passagensFiltradas.length > 0 && (
-                            <div className="pagination-wrapper">
-                                <span>
-                                    Página {paginaAtual} de {totalPaginas} — exibindo{" "}
-                                    {passagensPaginadas.length} de {passagensFiltradas.length}{" "}
-                                    registros
-                                </span>
-
-                                <div className="pagination-actions">
-                                    <button
-                                        disabled={paginaAtual === 1}
-                                        onClick={() => setPaginaAtual((pagina) => pagina - 1)}
-                                    >
-                                        Anterior
-                                    </button>
-
-                                    <button
-                                        disabled={paginaAtual === totalPaginas}
-                                        onClick={() => setPaginaAtual((pagina) => pagina + 1)}
-                                    >
-                                        Próxima
-                                    </button>
-                                </div>
-                            </div>
-                        )}
+                        <Pagination
+                            paginaAtual={paginaAtual}
+                            totalPaginas={totalPaginas}
+                            quantidadeAtual={passagensPaginadas.length}
+                            totalRegistros={passagensFiltradas.length}
+                            onAnterior={() => setPaginaAtual((pagina) => pagina - 1)}
+                            onProxima={() => setPaginaAtual((pagina) => pagina + 1)}
+                        />
                     </CardMain>
                 </div>
             </div>
 
-            {passagemSelecionada && (
-                <div
-                    className="modal fade show d-block"
-                    tabIndex={-1}
-                    role="dialog"
-                    style={{ backgroundColor: "rgba(0, 0, 0, 0.75)" }}
-                >
-                    <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-                        <div className="modal-content">
-                            <div className="modal-header passagem-modal-header">
-                                <div>
-                                    <h5 className="modal-title">
-                                        {visualizacaoModal === "detalhes" && "Detalhes da Passagem"}
-                                        {visualizacaoModal === "relatorio" && "Relatório da Passagem"}
-                                        {visualizacaoModal === "ocr" && "Imagem OCR"}
-                                    </h5>
-                                    <small>{passagemSelecionada.id}</small>
-                                </div>
+            <Modal
+                show={!!passagemSelecionada}
+                title={
+                    visualizacaoModal === "detalhes"
+                        ? "Detalhes da Passagem"
+                        : visualizacaoModal === "relatorio"
+                            ? "Relatório da Passagem"
+                            : "Imagem OCR"
+                }
+                subtitle={passagemSelecionada?.id}
+                size="xl"
+                onClose={fecharModal}
+            >
+                {passagemSelecionada && (
+                    <>
+                        <ModalTabs<VisualizacaoModal>
+                            tabs={[
+                                { key: "detalhes", label: "Detalhes" },
+                                { key: "relatorio", label: "Relatório" },
+                                { key: "ocr", label: "OCR" }
+                            ]}
+                            activeTab={visualizacaoModal}
+                            onChange={setVisualizacaoModal}
+                        />
 
-                                <button
-                                    type="button"
-                                    className="btn-close btn-close-white"
-                                    onClick={fecharModal}
-                                ></button>
+                        {visualizacaoModal === "detalhes" && (
+                            <div className="passagem-details-bootstrap">
+                                <DetailSection title="Dados do Veículo">
+                                    <p>
+                                        <strong>Placa:</strong> {passagemSelecionada.placa}
+                                    </p>
+
+                                    <p>
+                                        <strong>Tipo de veículo:</strong>{" "}
+                                        {passagemSelecionada.tipoVeiculo}
+                                        {passagemSelecionada.descricaoTipo
+                                            ? ` - ${passagemSelecionada.descricaoTipo}`
+                                            : ""}
+                                    </p>
+
+                                    <p>
+                                        <strong>Marca:</strong>{" "}
+                                        {passagemSelecionada.marca || "Não informado"}
+                                    </p>
+
+                                    <p>
+                                        <strong>Carga declarada:</strong>{" "}
+                                        {passagemSelecionada.cargaDeclarada || "Não informado"}
+                                    </p>
+                                </DetailSection>
+
+                                <DetailSection title="Dados da Passagem">
+                                    <p>
+                                        <strong>Data:</strong> {passagemSelecionada.data}
+                                    </p>
+
+                                    <p>
+                                        <strong>Local:</strong>{" "}
+                                        {passagemSelecionada.local || "Não informado"}
+                                    </p>
+
+                                    <p>
+                                        <strong>Velocidade:</strong>{" "}
+                                        {passagemSelecionada.velocidade || "Não informado"}
+                                    </p>
+
+                                    <p>
+                                        <strong>Sentido / Faixa:</strong>{" "}
+                                        {passagemSelecionada.sentido || "Não informado"} /{" "}
+                                        {passagemSelecionada.faixa || "Não informado"}
+                                    </p>
+                                </DetailSection>
+
+                                <DetailSection title="Resultado da Pesagem">
+                                    <p>
+                                        <strong>PBT registrado:</strong> {passagemSelecionada.pbt}
+                                    </p>
+
+                                    <p>
+                                        <strong>Limite permitido:</strong>{" "}
+                                        {passagemSelecionada.limite}
+                                    </p>
+
+                                    <p>
+                                        <strong>Excesso:</strong> {passagemSelecionada.excesso}
+                                    </p>
+
+                                    <p>
+                                        <strong>Status:</strong>{" "}
+                                        <span
+                                            className={`status ${passagemSelecionada.statusClass}`}
+                                        >
+                                            {passagemSelecionada.status}
+                                        </span>
+                                    </p>
+                                </DetailSection>
                             </div>
+                        )}
 
-                            <div className="modal-body mb-3">
-                                <ul className="nav nav-pills modal-tabs-bootstrap mb-4">
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${visualizacaoModal === "detalhes" ? "active" : ""
-                                                }`}
-                                            onClick={() => setVisualizacaoModal("detalhes")}
-                                        >
-                                            Detalhes
-                                        </button>
-                                    </li>
+                        {visualizacaoModal === "relatorio" && (
+                            <div className="passagem-details-bootstrap">
+                                <DetailSection title="Relatório de Monitoramento">
+                                    <p>
+                                        <strong>Número:</strong>{" "}
+                                        {passagemSelecionada.relatorio?.numero || "Não informado"}
+                                    </p>
 
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${visualizacaoModal === "relatorio" ? "active" : ""
-                                                }`}
-                                            onClick={() => setVisualizacaoModal("relatorio")}
-                                        >
-                                            Relatório
-                                        </button>
-                                    </li>
+                                    <p>
+                                        <strong>Situação:</strong>{" "}
+                                        {passagemSelecionada.relatorio?.situacao ||
+                                            "Não informado"}
+                                    </p>
 
-                                    <li className="nav-item">
-                                        <button
-                                            className={`nav-link ${visualizacaoModal === "ocr" ? "active" : ""
-                                                }`}
-                                            onClick={() => setVisualizacaoModal("ocr")}
-                                        >
-                                            OCR
-                                        </button>
-                                    </li>
-                                </ul>
+                                    <p>
+                                        <strong>Base legal:</strong>{" "}
+                                        {passagemSelecionada.relatorio?.baseLegal ||
+                                            "Não informado"}
+                                    </p>
 
-                                {visualizacaoModal === "detalhes" && (
-                                    <div className="passagem-details-bootstrap">
-                                        <div className="detalhes-section mb-3">
-                                            <h6>Dados do Veículo</h6>
+                                    <p>
+                                        <strong>Observação:</strong>{" "}
+                                        {passagemSelecionada.relatorio?.observacao ||
+                                            "Não informado"}
+                                    </p>
+                                </DetailSection>
 
-                                            <p><strong>Placa:</strong> {passagemSelecionada.placa}</p>
-                                            <p>
-                                                <strong>Tipo de veículo:</strong>{" "}
-                                                {passagemSelecionada.tipoVeiculo}
-                                                {passagemSelecionada.descricaoTipo
-                                                    ? ` - ${passagemSelecionada.descricaoTipo}`
-                                                    : ""}
-                                            </p>
-                                            <p><strong>Marca:</strong> {passagemSelecionada.marca || "Não informado"}</p>
-                                            <p><strong>Carga declarada:</strong> {passagemSelecionada.cargaDeclarada || "Não informado"}</p>
-                                        </div>
+                                <DetailSection title="Dados da Passagem">
+                                    <p>
+                                        <strong>Placa:</strong> {passagemSelecionada.placa}
+                                    </p>
 
-                                        <div className="detalhes-section mb-3">
-                                            <h6>Dados da Passagem</h6>
+                                    <p>
+                                        <strong>Veículo:</strong>{" "}
+                                        {passagemSelecionada.tipoVeiculo}
+                                    </p>
 
-                                            <p><strong>Data:</strong> {passagemSelecionada.data}</p>
-                                            <p><strong>Local:</strong> {passagemSelecionada.local || "Não informado"}</p>
-                                            <p><strong>Velocidade:</strong> {passagemSelecionada.velocidade || "Não informado"}</p>
-                                            <p>
-                                                <strong>Sentido / Faixa:</strong>{" "}
-                                                {passagemSelecionada.sentido || "Não informado"} /{" "}
-                                                {passagemSelecionada.faixa || "Não informado"}
-                                            </p>
-                                        </div>
+                                    <p>
+                                        <strong>Local:</strong>{" "}
+                                        {passagemSelecionada.local || "Não informado"}
+                                    </p>
 
-                                        <div className="detalhes-section mb-3">
-                                            <h6>Resultado da Pesagem</h6>
+                                    <p>
+                                        <strong>Data:</strong> {passagemSelecionada.data}
+                                    </p>
 
-                                            <p><strong>PBT registrado:</strong> {passagemSelecionada.pbt}</p>
-                                            <p><strong>Limite permitido:</strong> {passagemSelecionada.limite}</p>
-                                            <p><strong>Excesso:</strong> {passagemSelecionada.excesso}</p>
-                                            <p>
-                                                <strong>Status:</strong>{" "}
-                                                <span className={`status ${passagemSelecionada.statusClass}`}>
-                                                    {passagemSelecionada.status}
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div>
-                                )}
+                                    <p>
+                                        <strong>PBT registrado:</strong> {passagemSelecionada.pbt}
+                                    </p>
 
-                                {visualizacaoModal === "relatorio" && (
-                                    <div className="passagem-details-bootstrap">
-                                        <div className="detalhes-section mb-3">
-                                            <h6>Relatório de Monitoramento</h6>
-                                            <p><strong>Número:</strong> {passagemSelecionada.relatorio?.numero || "Não informado"}</p>
-                                            <p><strong>Situação:</strong> {passagemSelecionada.relatorio?.situacao || "Não informado"}</p>
-                                            <p><strong>Base legal:</strong> {passagemSelecionada.relatorio?.baseLegal || "Não informado"}</p>
-                                            <p><strong>Observação:</strong> {passagemSelecionada.relatorio?.observacao || "Não informado"}</p>
-                                        </div>
+                                    <p>
+                                        <strong>Limite permitido:</strong>{" "}
+                                        {passagemSelecionada.limite}
+                                    </p>
 
-                                        <div className="detalhes-section mb-3">
-                                            <h6>Dados da Passagem</h6>
-                                            <p><strong>Placa:</strong> {passagemSelecionada.placa}</p>
-                                            <p><strong>Veículo:</strong> {passagemSelecionada.tipoVeiculo}</p>
-                                            <p><strong>Local:</strong> {passagemSelecionada.local || "Não informado"}</p>
-                                            <p><strong>Data:</strong> {passagemSelecionada.data}</p>
-                                            <p><strong>PBT registrado:</strong> {passagemSelecionada.pbt}</p>
-                                            <p><strong>Limite permitido:</strong> {passagemSelecionada.limite}</p>
-                                            <p><strong>Excesso:</strong> {passagemSelecionada.excesso}</p>
-                                            <p><strong>Status:</strong> {passagemSelecionada.status}</p>
-                                        </div>
+                                    <p>
+                                        <strong>Excesso:</strong> {passagemSelecionada.excesso}
+                                    </p>
 
-                                        <div className="detalhes-section mb-3">
-                                            <h6>Pesagem por Eixo</h6>
+                                    <p>
+                                        <strong>Status:</strong> {passagemSelecionada.status}
+                                    </p>
+                                </DetailSection>
 
-                                            <div className="table-responsive">
-                                                <table className="w-100 recent-table">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Eixo</th>
-                                                            <th>Peso</th>
-                                                            <th>Limite</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                        {passagemSelecionada.eixos && passagemSelecionada.eixos.length > 0 ? (
-                                                            passagemSelecionada.eixos.map((eixo) => (
-                                                                <tr key={eixo.eixo}>
-                                                                    <td>Eixo {eixo.eixo}</td>
-                                                                    <td>{eixo.peso}</td>
-                                                                    <td>{eixo.limite}</td>
-                                                                </tr>
-                                                            ))
-                                                        ) : (
-                                                            <tr>
-                                                                <td colSpan={3}>Nenhum eixo informado.</td>
-                                                            </tr>
-                                                        )}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {visualizacaoModal === "ocr" && (
-                                    <div className="passagem-details-bootstrap">
-                                        <div className="detalhes-section mb-3">
-                                            <h6>Visualização OCR</h6>
-
-                                            <div className="ocr-image-box">
-                                                <div className="ocr-plate">{passagemSelecionada.placa}</div>
-                                                <div className="ocr-line"></div>
-                                                <span>Imagem simulada OCR</span>
-                                            </div>
-                                        </div>
-
-                                        <div className="detalhes-section mb-3">
-                                            <h6>Dados Reconhecidos</h6>
-                                            <p><strong>Placa reconhecida:</strong> {passagemSelecionada.placa}</p>
-                                            <p><strong>Confiança OCR:</strong> {passagemSelecionada.confiancaOcr || "Não informado"}</p>
-                                            <p><strong>Arquivo da imagem:</strong> {passagemSelecionada.imagemOcr || "Não informado"}</p>
-                                        </div>
-                                    </div>
-                                )}
+                                <DetailSection title="Pesagem por Eixo">
+                                    <Table
+                                        data={passagemSelecionada.eixos || []}
+                                        emptyMessage="Nenhum eixo informado."
+                                        columns={[
+                                            {
+                                                header: "Eixo",
+                                                render: (eixo) => `Eixo ${eixo.eixo}`
+                                            },
+                                            { header: "Peso", accessor: "peso" },
+                                            { header: "Limite", accessor: "limite" }
+                                        ]}
+                                    />
+                                </DetailSection>
                             </div>
+                        )}
 
-                        </div>
-                    </div>
-                </div>
-            )}
+                        {visualizacaoModal === "ocr" && (
+                            <div className="passagem-details-bootstrap">
+                                <DetailSection title="Visualização OCR">
+                                    <div className="ocr-image-box">
+                                        <div className="ocr-plate">
+                                            {passagemSelecionada.placa}
+                                        </div>
+
+                                        <div className="ocr-line"></div>
+
+                                        <span>Imagem simulada OCR</span>
+                                    </div>
+                                </DetailSection>
+
+                                <DetailSection title="Dados Reconhecidos">
+                                    <p>
+                                        <strong>Placa reconhecida:</strong>{" "}
+                                        {passagemSelecionada.placa}
+                                    </p>
+
+                                    <p>
+                                        <strong>Confiança OCR:</strong>{" "}
+                                        {passagemSelecionada.confiancaOcr || "Não informado"}
+                                    </p>
+
+                                    <p>
+                                        <strong>Arquivo da imagem:</strong>{" "}
+                                        {passagemSelecionada.imagemOcr || "Não informado"}
+                                    </p>
+                                </DetailSection>
+                            </div>
+                        )}
+                    </>
+                )}
+            </Modal>
         </div>
     );
 }
