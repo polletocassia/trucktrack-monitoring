@@ -4,7 +4,7 @@
   import Dashboard from "./pages/Dashboard";
   import Passagens from "./pages/Passagens";
   import Relatorios from "./pages/Relatorios";
-  // import Veiculos from "./pages/Vehicles";
+  import Veiculos from "./pages/Veiculos";
   // import Configuracoes from "./pages/Settings";
 
   function App() {
@@ -19,8 +19,8 @@
             <Route index element={<Dashboard />} />
             <Route path="passagens" element={<Passagens />} />
             <Route path="relatorios" element={<Relatorios />} />
-
-            {/* <Route path="veiculos" element={<Veiculos />} /> */}
+            <Route path="veiculos" element={<Veiculos />} />
+            
             {/* <Route path="configuracoes" element={<Configuracoes />} /> */}
 
           </Route>
